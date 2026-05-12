@@ -10,3 +10,13 @@
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+# Built binary
+/red
+
+# goreleaser output
+/dist/
+
+# Editor / IDE
+.idea/
+.vscode/

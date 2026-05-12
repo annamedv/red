@@ -9,7 +9,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/gdamore/tcell"
+	"github.com/gdamore/tcell/v2"
 	"github.com/hokaccha/go-prettyjson"
 	"github.com/rivo/tview"
 	"github.com/satyrius/gonx"
@@ -147,13 +147,12 @@ func renderColumns() {
 }
 
 func update(value map[string]interface{}) {
+	store.Lock()
 	if len(keys) == 0 {
 		keys = mapKeys(value)
 		store.SetKeys(keys)
-		renderColumns()
+		app.QueueUpdate(renderColumns)
 	}
-
-	store.Lock()
 	store.Push(value)
 	store.Unlock()
 }
@@ -183,20 +182,6 @@ func readNginx() {
 	if err != nil {
 		panic(err)
 	}
-	for {
-		rec, err := reader.Read()
-		if err == io.EOF {
-			break
-		} else if err != nil {
-			panic(err)
-		}
-		// Process the record... e.g.
-		fmt.Printf("Parsed entry: %+v\n", rec)
-	}
-}
-
-func readCommon(format string) {
-	reader := gonx.NewReader(os.Stdin, format)
 	for {
 		rec, err := reader.Read()
 		if err == io.EOF {

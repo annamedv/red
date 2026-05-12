@@ -104,9 +104,8 @@ func (s *Store) Key(value map[string]interface{}) []string {
 
 func (s *Store) Shift() {
 	for i := range s.rows {
-		for j := 0; j < len(s.rows[i].trend)-1; j++ {
-			s.rows[i].trend[j] = s.rows[i].trend[j+1]
-		}
-		s.rows[i].trend[len(s.rows[i].trend)-1] = 0
+		t := s.rows[i].trend
+		copy(t, t[1:])
+		t[len(t)-1] = 0
 	}
 }

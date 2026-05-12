@@ -243,6 +243,67 @@ This data is parsing from User-Agent header.
 Search line on top. Write path, IP or status code, and all UI make filter
 for this. Press Esc for clean.
 
+### Web UI with login and tracking script
+
+Terminal is good for engineers, but not all peoples like black window with
+text. Web UI in browser can be much more friendly for everybody.
+
+How it can work:
+
+1. **Tracking script** — small JavaScript file (like 1-2 kilobyte), site
+   owner put it on every page:
+
+   ```html
+   <script defer src="https://red.example.com/track.js"
+           data-site="my-blog"></script>
+   ```
+
+   Script send small ping when visitor open page. Ping contain: page URL,
+   referer, screen size, language, user agent. No cookies, no personal
+   datas — so GDPR is happy.
+
+2. **Server part** — red receive this pings on endpoint like
+   `/api/event`, save them on disk or in small base (SQLite works fine
+   without big setup).
+
+3. **Login page** — simple form with email and password. After login user
+   see dashboard. One account can watch many sites.
+
+   ```
+   ┌──────────────────────────────┐
+   │     Welcome to red           │
+   │                              │
+   │  Email:    [______________]  │
+   │  Password: [______________]  │
+   │                              │
+   │         [  Sign in  ]        │
+   │                              │
+   │  Forgot password? Register   │
+   └──────────────────────────────┘
+   ```
+
+   For begin can be enough one admin user from config file. Later — make
+   normal registration with email confirm.
+
+4. **Dashboard in browser** — same ideas like terminal UI (big numbers,
+   panels, map, colors), but with mouse, animation and more space. Charts
+   can be drawn beautiful with library like Chart.js or just SVG by hand.
+
+5. **Share link** — generate public link what show statistics for one
+   site, without login. Useful when you want show numbers to client or
+   on Twitter.
+
+Why this is good:
+
+- Site owner not need to keep terminal open all day
+- Can open dashboard from phone in bus
+- Can give access to colleagues without SSH key
+- Looks more professional for non-technical peoples
+
+What red already have for this — JSON logs processing and grouping logic.
+Need to add: HTTP server, tracking endpoint, login system, HTML pages.
+Big job, but very interesting.
+
 ### Why this is important
 
 Now red is good for engineers what read logs. With this ideas it can also

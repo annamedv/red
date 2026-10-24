@@ -21,6 +21,7 @@ func Spark(nums []float64) string {
 }
 
 func normalize(nums []float64) []int {
+	nums = append([]float64(nil), nums...)
 	total := float64(len(steps))
 	lo := slices.Min(nums)
 	for i := range nums {
